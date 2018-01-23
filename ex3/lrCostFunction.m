@@ -8,6 +8,7 @@ function [J, grad] = lrCostFunction(theta, X, y, lambda)
 % Initialize some useful values
 m = length(y); % number of training examples
 
+
 % You need to return the following variables correctly 
 J = 0;
 grad = zeros(size(theta));
@@ -19,11 +20,10 @@ grad = zeros(size(theta));
 %               derivatives of the cost w.r.t. each parameter in theta
 
 h=sigmoid(X*theta);
-J=sum((-y)' * log(h)-(1-y)'*log(1-h))/m;
-grad=(X'*(h-y))/m;
-temp = theta;
-temp(1)=0;
-grad = grad + lambda*temp
+shit_theta = (theta(2:size(theta)));
+reg_theta = [0; shit_theta];
+J=sum((-y.* log(h) - (1 - y) .* log(1-h)))*(1/m)+ ((lambda / (2*m))*sum(reg_theta.^2));
+grad=((1/m)*((h-y)'*X)') + ((lambda/m) * reg_theta);
 %
 % Hint: The computation of the cost function and gradients can be
 %       efficiently vectorized. For example, consider the computation
