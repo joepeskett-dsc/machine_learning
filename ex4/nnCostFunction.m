@@ -61,14 +61,47 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+y_mat = zeros(m, num_labels);
+size(y_mat);
+
+for i = 1:m;
+  y_vec =(1:10);
+  y_mat(i,:) = (y_vec == y(i));
+  
+end
+
+
+a_1 = [ones(m, 1) X];
+a =(sigmoid(a_1*Theta1'));
+m =size(X,1);
+a_2 = [ones(m,1) a];
+a_3 = sigmoid(a_2 * Theta2');
+h =a_3;
+y =y_mat;
+J_unreg = sum(sum((-y.* log(h) - (1 - y) .* log(1-h))))'*(1/m);
+Theta1_reg = Theta1;
+Theta1_reg(:,1) = 0;
+
+Theta2_reg = Theta2;
+Theta2_reg(:,1) = 0;
+regular = (lambda/(2*m))*(sum(sum(Theta1_reg.^2)) + sum(sum(Theta2_reg.^2)));
+J = J_unreg + regular;
 
 
 
+grad=((1/m)*((h-y)'*X)');
+
+
+%This is cost function for logistic regression
+%h=sigmoid(X*theta);
+%shit_theta = (theta(2:size(theta)));
+%reg_theta = [0; shit_theta];
+%J=sum((-y.* log(h) - (1 - y) .* log(1-h)))*(1/m)+ ((lambda / (2*m))*sum(reg_theta.^2));
+%grad=((1/m)*((h-y)'*X)') + ((lambda/m) * reg_theta);
 
 
 
-
-
+  
 
 
 
