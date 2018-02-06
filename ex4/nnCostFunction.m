@@ -61,8 +61,9 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+
+% Part 1 - Forward propogation
 y_mat = zeros(m, num_labels);
-size(y_mat);
 
 for i = 1:m;
   y_vec =(1:10);
@@ -70,7 +71,7 @@ for i = 1:m;
   
 end
 
-
+size(y_mat)
 a_1 = [ones(m, 1) X];
 a =(sigmoid(a_1*Theta1'));
 m =size(X,1);
@@ -89,7 +90,7 @@ J = J_unreg + regular;
 
 
 
-grad=((1/m)*((h-y)'*X)');
+
 
 
 %This is cost function for logistic regression
@@ -100,10 +101,41 @@ grad=((1/m)*((h-y)'*X)');
 %grad=((1/m)*((h-y)'*X)') + ((lambda/m) * reg_theta);
 
 
-
+% Part 2 Back Propogation
   
-
-
+Delta_1 = 0;
+Delta_2 = 0  ;
+  
+for t = 1:m;
+    %1 Perform a feedforward pass
+    a_1 = [1 X(t,:)];
+    z_2=(a_1 * Theta1');
+    a =(sigmoid(z_2));
+    m =size(X,1);
+    a_2 = [1 a];
+    a_3 = sigmoid(a_2 * Theta2');
+    h =a_3;
+    
+    %2
+    y_vec = 1 : 10;
+    y = y(:,t) == y_vec;
+    d_3 = h - y;
+    
+    %3
+   
+   d_2=(Theta2'*d_3') .* [1 sigmoidGradient(z_2)];
+    d_2 = d_2(2:end);
+    %4
+    
+    Delta_2 = Delta_2 + d_3'*(a_2);
+    Delta_1 = Delta_1 + d_2'*(a_1);
+   
+  end
+  %5
+    Theta1_grad = Delta_1/m;
+    Theta2_grad = Delta_2/m;
+ 
+%grad=((1/m)*((h-y)'*X)');
 
 
 
