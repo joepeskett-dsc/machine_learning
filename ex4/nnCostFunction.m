@@ -66,12 +66,12 @@ Theta2_grad = zeros(size(Theta2));
 y_mat = zeros(m, num_labels);
 
 for i = 1:m;
-  y_vec =(1:10);
+  y_vec =(1:num_labels);
   y_mat(i,:) = (y_vec == y(i));
   
 end
 
-size(y_mat)
+size(y_mat);
 a_1 = [ones(m, 1) X];
 a =(sigmoid(a_1*Theta1'));
 m =size(X,1);
@@ -102,7 +102,7 @@ J = J_unreg + regular;
 
 
 % Part 2 Back Propogation
-  
+
 Delta_1 = 0;
 Delta_2 = 0  ;
   
@@ -116,19 +116,24 @@ for t = 1:m;
     a_3 = sigmoid(a_2 * Theta2');
     h =a_3;
     
-    %2
-    y_vec = 1 : 10;
-    y = y(:,t) == y_vec;
-    d_3 = h - y;
+    %2 set output of d_3 to difference between prediction and Y value
+    Y_vec = 1 : num_labels;
+    Y = y(t,:) == Y_vec;
+    d_3 = h - Y;
     
-    %3
-   
-   d_2=(Theta2'*d_3') .* [1 sigmoidGradient(z_2)];
-    d_2 = d_2(2:end);
-    %4
+    %3 set d_2
+    size(Theta2);
+    size(d_3)
+    size(z_2);
+    d_2= (d_3*Theta2).*  [1 sigmoidGradient(z_2)];
+    size(d_2)
+    d_2 = d_2(2:size(d_2);
+    size(d_2)
     
-    Delta_2 = Delta_2 + d_3'*(a_2);
-    Delta_1 = Delta_1 + d_2'*(a_1);
+    %4accumulate the gradients
+    
+    Delta_2 = Delta_2 + (d_3'*(a_2));
+    Delta_1 = Delta_1 + (d_2'*(a_1));
    
   end
   %5
