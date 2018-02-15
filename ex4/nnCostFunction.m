@@ -105,38 +105,40 @@ J = J_unreg + regular;
 
 Delta_1 = 0;
 Delta_2 = 0  ;
-  
+m = size(X,1); 
 for t = 1:m;
     %1 Perform a feedforward pass
     a_1 = [1 X(t,:)];
     z_2=(a_1 * Theta1');
-    a =(sigmoid(z_2));
-    m =size(X,1);
-    a_2 = [1 a];
-    a_3 = sigmoid(a_2 * Theta2');
+    a_2 =(sigmoid(z_2));
+    a_2 = [1 a_2];
+    z_3 =(a_2 * Theta2');
+    a_3 = sigmoid(z_3);
     h =a_3;
     
     %2 set output of d_3 to difference between prediction and Y value
-    Y_vec = 1 : num_labels;
+    Y_vec = [1 : num_labels];
     Y = y(t,:) == Y_vec;
     d_3 = h - Y;
     
     %3 set d_2
     size(Theta2);
-    size(d_3)
+    size(d_3);
     size(z_2);
     d_2= (d_3*Theta2).*  [1 sigmoidGradient(z_2)];
     size(d_2)
-    d_2 = d_2(2:size(d_2);
-    size(d_2)
+    size(a_1)
+    d_2 = d_2(2:size(d_2));
+    size(d_2);
     
     %4accumulate the gradients
-    
-    Delta_2 = Delta_2 + (d_3'*(a_2));
-    Delta_1 = Delta_1 + (d_2'*(a_1));
    
+    Delta_1 = Delta_1 + (a_1'*d_2);
+    Delta_2 = Delta_2 + (a_2'*d_3);
+    
   end
   %5
+    
     Theta1_grad = Delta_1/m;
     Theta2_grad = Delta_2/m;
  
