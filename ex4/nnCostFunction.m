@@ -103,61 +103,53 @@ J = J_unreg + regular;
 
 % Part 2 Back Propogation
 
+%1 set input layer value to a_1 and perform feedforward pass
 Delta_1 = 0;
 Delta_2 = 0  ;
-m = size(X,1); 
-for t = 1:m;
-    %1 Perform a feedforward pass
-    a_1 = [1 X(t,:)];
-    z_2=(a_1 * Theta1');
-    a_2 =(sigmoid(z_2));
-    a_2 = [1 a_2];
-    z_3 =(a_2 * Theta2');
-    a_3 = sigmoid(z_3);
-    h =a_3;
+for t = 1:m
+
+  a_1 = [1;X(t,:)'];
+  z_2 = Theta1*a_1;
+  a_2 = sigmoid(z_2);
+  a_2 = [1; a_2];
+  z_3 = Theta2*a_2;
+  a_3 = sigmoid(z_3);
+  h = a_3;
+  size(h);
+ %2 for each output unit k, set d=a_3-Y (Y should be a vector) 
+
+  Y = y_mat(t,:);
+  d_3 = h - Y';
     
-    %2 set output of d_3 to difference between prediction and Y value
-    Y_vec = [1 : num_labels];
-    Y = y(t,:) == Y_vec;
-    d_3 = h - Y;
-    
-    %3 set d_2
-    size(Theta2);
-    size(d_3);
-    size(z_2);
-    d_2= (d_3*Theta2).*  [1 sigmoidGradient(z_2)];
-    size(d_2)
-    size(a_1)
-    d_2 = d_2(2:size(d_2));
-    size(d_2);
-    
-    %4accumulate the gradients
-   
-    Delta_1 = Delta_1 + (a_1'*d_2);
-    Delta_2 = Delta_2 + (a_2'*d_3);
-    
-  end
-  %5
-    
-    Theta1_grad = Delta_1/m;
-    Theta2_grad = Delta_2/m;
- 
-%grad=((1/m)*((h-y)'*X)');
+%3 For hidden layer (l=2) set d_2 = Theta2'*d_3 .*g'(z_2)
 
+  d_2 = Theta2'*d_3.*[1; sigmoidGradient(z_2)];
+  size(d_2);
+  
+%4 Accumulate the gradients - remember to remove d0_2.
 
+  d_2 = d_2(2:end);
 
-
-
-
-
-
+  Delta_1 += d_2*a_1' ;
+  Delta_2 +=  d_3*a_2' ;
+end
 
 % -------------------------------------------------------------
 
 % =========================================================================
 
 % Unroll gradients
+ 
+%Delta_1(:,2:end) = Delta_1(:,2:end) + lambda * (1/m) * Theta1(:,2:end);
+%Delta_2(:,2:end) = Delta_2(:,2:end) + lambda * (1/m) * Theta2(:,2:end);
+
+
+Theta1_grad = Delta_1*(1/m)+ (lambda * (1/m) * Theta1(:,2:end));
+Theta2_grad = Delta_2*(1/m)+ (lambda * (1/m) * Theta2(:,2:end));
+
+
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
+
 
 
 end
