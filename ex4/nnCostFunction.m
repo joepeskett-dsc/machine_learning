@@ -62,30 +62,94 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Part 1 - Forward propogation
+y_mat = zeros(m, num_labels);
+
+for i = 1:m;
+  y_vec =(1:num_labels);
+  y_mat(i,:) = (y_vec == y(i));
+  
+end
+
+size(y_mat);
+a_1 = [ones(m, 1) X];
+a =(sigmoid(a_1*Theta1'));
+m =size(X,1);
+a_2 = [ones(m,1) a];
+a_3 = sigmoid(a_2 * Theta2');
+h =a_3;
+y =y_mat;
+J_unreg = sum(sum((-y.* log(h) - (1 - y) .* log(1-h))))'*(1/m);
+Theta1_reg = Theta1;
+Theta1_reg(:,1) = 0;
+
+Theta2_reg = Theta2;
+Theta2_reg(:,1) = 0;
+regular = (lambda/(2*m))*(sum(sum(Theta1_reg.^2)) + sum(sum(Theta2_reg.^2)));
+J = J_unreg + regular;
 
 
 
 
 
 
+%This is cost function for logistic regression
+%h=sigmoid(X*theta);
+%shit_theta = (theta(2:size(theta)));
+%reg_theta = [0; shit_theta];
+%J=sum((-y.* log(h) - (1 - y) .* log(1-h)))*(1/m)+ ((lambda / (2*m))*sum(reg_theta.^2));
+%grad=((1/m)*((h-y)'*X)') + ((lambda/m) * reg_theta);
 
 
+% Part 2 Back Propogation
 
+%1 set input layer value to a_1 and perform feedforward pass
+Delta_1 = 0;
+Delta_2 = 0  ;
+for t = 1:m
 
+  a_1 = [1;X(t,:)'];
+  z_2 = Theta1*a_1;
+  a_2 = sigmoid(z_2);
+  a_2 = [1; a_2];
+  z_3 = Theta2*a_2;
+  a_3 = sigmoid(z_3);
+  h = a_3;
+  size(h);
+ %2 for each output unit k, set d=a_3-Y (Y should be a vector) 
 
+  Y = y_mat(t,:);
+  d_3 = h - Y';
+    
+%3 For hidden layer (l=2) set d_2 = Theta2'*d_3 .*g'(z_2)
 
+  d_2 = Theta2'*d_3.*[1; sigmoidGradient(z_2)];
+  size(d_2);
+  
+%4 Accumulate the gradients - remember to remove d0_2.
 
+  d_2 = d_2(2:end);
 
-
-
-
+  Delta_1 += d_2*a_1' ;
+  Delta_2 +=  d_3*a_2' ;
+end
 
 % -------------------------------------------------------------
 
 % =========================================================================
 
 % Unroll gradients
+ 
+%Delta_1(:,2:end) = Delta_1(:,2:end) + lambda * (1/m) * Theta1(:,2:end);
+%Delta_2(:,2:end) = Delta_2(:,2:end) + lambda * (1/m) * Theta2(:,2:end);
+
+
+Theta1_grad = Delta_1*(1/m)+ (lambda * (1/m) * Theta1(:,2:end));
+Theta2_grad = Delta_2*(1/m)+ (lambda * (1/m) * Theta2(:,2:end));
+
+
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
+
 
 
 end
