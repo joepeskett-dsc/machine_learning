@@ -140,13 +140,14 @@ end
 
 % Unroll gradients
  
-%Delta_1(:,2:end) = Delta_1(:,2:end) + lambda * (1/m) * Theta1(:,2:end);
-%Delta_2(:,2:end) = Delta_2(:,2:end) + lambda * (1/m) * Theta2(:,2:end);
 
 
-Theta1_grad = Delta_1*(1/m)+ (lambda * (1/m) * Theta1(:,2:end));
-Theta2_grad = Delta_2*(1/m)+ (lambda * (1/m) * Theta2(:,2:end));
 
+Theta1_grad = Delta_1*(1/m);
+Theta2_grad = Delta_2*(1/m);
+
+Theta1_grad(:,2:end) += lambda * (1/m) * Theta1(:,2:end);
+Theta2_grad(:,2:end) += lambda * (1/m) * Theta2(:,2:end);
 
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
