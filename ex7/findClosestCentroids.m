@@ -21,21 +21,28 @@ idx = zeros(size(X,1), 1);
 % Note: You can use a for-loop over the examples to compute this.
 %
 
-for i = 1:length(X)
+for i = 1:length(X);
   dist = inf;
-  test_x = X(i);
-  for j = 1:length(K)
-    test_centroid = centroids(j);
-    test_dist = (X-test_centroid).^2;
-    if test_dist < dist,
-      test_index = j;
-      idx(i) = test_index;
+  test_x = X(i,:);
+ i
+ for j = 1:K
+   j
+    test_centroid = centroids(j,:);
+    size(test_centroid);
+    size(test_x);
+    test_dist = sum((test_x-test_centroid)).^2;
+    if test_dist <dist,
+      dist = test_dist;
+      idx(i) = j;
     end
    end
-   
 end
-     
-
+%dist_mat = zeros(size(X,1),K)
+%  for i =1:K
+%    dist_mat(:,i) = (X - centroids(i,:)).^2
+%    end
+    
+  
 
 
 
