@@ -24,13 +24,11 @@ idx = zeros(size(X,1), 1);
 for i = 1:length(X);
   dist = inf;
   test_x = X(i,:);
- i
  for j = 1:K
-   j
     test_centroid = centroids(j,:);
     size(test_centroid);
     size(test_x);
-    test_dist = sum((test_x-test_centroid)).^2;
+    test_dist = sum((test_x-test_centroid).^2);
     if test_dist <dist,
       dist = test_dist;
       idx(i) = j;
